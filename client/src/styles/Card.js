@@ -22,7 +22,7 @@ export const Card = styled.div`
   padding: 1em;
   margin: 1em;
   width: 20em;
-  height: 50em;
+  height: 10em;
   font-family: Verdana, sans-serif;
   border: 1px ;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);

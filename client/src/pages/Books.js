@@ -1,38 +1,45 @@
 import React, { useState } from 'react'
-import { Container, FormField, Input, CardButton, Error } from '../styles'
+import ResultCard from '../components/ResultCard';
+import { Container, FormField, Input, CardButton, Error, CardContainer } from '../styles'
 
 
 const Books = () => {
 
-    const [searchTerm, setSearchTerm] = useState()
-    const [searchType, setSearchType] = useState()
+    const [searchTerm, setSearchTerm] = useState('')
+    // const [searchType, setSearchType] = useState()
     const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState(false);
+    const [searchResults, setSearchResults] = useState([])
 
-
-    function parsedSearchType(searchType) {
-        let parsedType; 
-        switch(searchType) {
-            case 'author': 
-                parsedType = 'author';
-                break;
-            case 'title': 
-                parsedType = 'title';
-                break;
-            default: 
-                parsedType = 'q';
-                break;
-        }
-        return parsedType;
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setError(null)
         setIsLoading(true);
-        const parsedSearch = `${parsedSearchType(searchType)}=${searchTerm.split(' ').join('+')}`
-        fetch(`https://openlibrary.org/search.json?${parsedSearch}`)
-        .then(r => r.json())
-        .then(data => console.log(data))
+        if (searchTerm == null) {
+            setIsLoading(false)
+            setError('Please enter a search term');
+            return;
+        } else {
+            const parsedSearch = `q=${searchTerm.split(' ').join('+')}`
+            fetch(`https://openlibrary.org/search.json?${parsedSearch}`)
+            .then(r => r.json())
+            .then(data => {
+                setSearchResults(data.docs)
+                setIsLoading(false)
+                setSearchTerm('')
+            })
+        }
+        
+    }
+
+    let displayResults; 
+    if (searchResults.length == 0) {
+        displayResults = "Hmm... no matches found"
+    } else {
+        displayResults = searchResults.map(result => {
+            return <li key={result.key} style={{listStyle:'none'}}><ResultCard result={result}/></li>
+        })
     }
 
   return (
@@ -48,7 +55,7 @@ const Books = () => {
                 >
                 </Input>
             </FormField>
-            <FormField>
+            {/* <FormField>
                 <select 
                     value={searchType}
                     onChange={(e) => setSearchType(e.target.value)}
@@ -57,7 +64,7 @@ const Books = () => {
                     <option value="author">Author</option>
                     <option value="genre">Genre</option>
                 </select>
-            </FormField>
+            </FormField> */}
             <FormField>
                 <CardButton variant="fill" color="primary" type="submit">
                     {isLoading ? "Loading..." : "Search"}
@@ -67,7 +74,7 @@ const Books = () => {
                 {error? <Error>{error}</Error> : "" }
             </FormField>
         </form>
-       
+         {displayResults}
     </Container>
   )
 }

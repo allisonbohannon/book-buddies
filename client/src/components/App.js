@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
 import Home from "../pages/Home";
-import Wineries from "../pages/Wineries";
+import Books from "../pages/Books";
 import Users from "../pages/Users";
 import WineryDetail from "../pages/WineryDetail";
 import EditCommentForm from "../pages/EditCommentForm";
@@ -102,7 +102,7 @@ function App() {
     <div>
             <NavigationBar />
             <Routes>
-                <Route path="/books" element={<Wineries
+                <Route path="/books" element={<Books
                   books={books}
                   onChangeRating={onChangeRating}
                   onAddRating={onAddRating}

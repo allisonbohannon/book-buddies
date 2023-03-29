@@ -15,13 +15,12 @@ import { UserContext } from "../context/User";
 
 
 function App() {
-  const [wineries, setWineries] = useState([])
-  const [users, setUsers] = useState([])
-  const [visits, setVisits] = useState([])
-  const [comments, setComments] = useState([])
+
   const { currentUser, setCurrentUser} =useContext(UserContext)
+  const [books, setBooks] = useState([])
+  const [users, setUsers] = useState([])
 
-
+// Check sessions to see whether a user is logged in
   useEffect(() => {
     fetch("/me").then((r) => {
       if (r.ok) {
@@ -30,61 +29,62 @@ function App() {
     });
   }, []);
 
+
+  //Set initial states
+
   useEffect(() => {
-    fetch(`/wineries`)
+    fetch(`/books`)
     .then(r => r.json())
-    .then(data => setWineries(data))
+    .then(data => setBooks(data))
 
     fetch(`/users`)
     .then(r => r.json())
     .then(data => setUsers(data))
 
-    fetch(`/visits`)
-    .then(r => r.json())
-    .then(data => setVisits(data))
-
-    fetch(`/comments`)
-    .then(r => r.json())
-    .then(data => setComments(data))
   }, [])
 
   const onAddComment = (comment) => {
-    setComments([...comments, comment])
+    // setComments([...comments, comment])
   }
 
   const onEditComment = (updatedComment) => {
-    setComments((comments)=> 
-      comments.map((comment)=> {
-        return comment.id === updatedComment.id ? updatedComment : comment
-    })
-  )}
+    // setComments((comments)=> 
+    //   comments.map((comment)=> {
+    //     return comment.id === updatedComment.id ? updatedComment : comment
+    // })
+  // )
+}
 
   const onDeleteComment = (deletedComment) => {
-    setComments((comments) => 
-      comments.filter((comment) => comment.id !== deletedComment.id)
-  )}
+    // setComments((comments) => 
+    //   comments.filter((comment) => comment.id !== deletedComment.id)
+  // )
+}
 
   const onAddUser = (userObject) => {
     setUsers([...users, userObject])
   }
 
   const onChangeRating = (updatedVisit) => {
-    setVisits((visits) => 
-      visits.map((visit) => {
-        return visit.id === updatedVisit.id ? updatedVisit : visit;
-      })
-  )} 
+  //   setVisits((visits) => 
+  //     visits.map((visit) => {
+  //       return visit.id === updatedVisit.id ? updatedVisit : visit;
+  //     })
+  // )
+} 
 
   const onAddRating = (newVisit) => {
-    setVisits([...visits, newVisit])
+    // setVisits([...visits, newVisit])
   }
 
-  const onUpdateWinery = (updatedWinery) => {
-    setWineries((wineries) => 
-      wineries.map((winery) => {
-        return winery.id === updatedWinery.id ? updatedWinery : winery; 
-      })
-  )}
+  // const onUpdateWinery = (updatedWinery) => {
+  //   setWineries((wineries) => 
+  //     wineries.map((winery) => {
+  //       return winery.id === updatedWinery.id ? updatedWinery : winery; 
+  //     })
+  // )}
+
+  //ensure user login prior to showing page
 
   if (!currentUser) return (
     <div>
@@ -102,51 +102,39 @@ function App() {
     <div>
             <NavigationBar />
             <Routes>
-                <Route path="/wineries" element={<Wineries
-                  wineries={wineries}
-                  visits={visits}
-                  comments={comments}
+                <Route path="/books" element={<Wineries
+                  books={books}
                   onChangeRating={onChangeRating}
                   onAddRating={onAddRating}
-                  onUpdateWinery={onUpdateWinery}
                 />}/> 
-                <Route path="/wineries/:wineryId" element={<WineryDetail
-                  wineries={wineries}
-                  visits={visits}
+                <Route path="/books/:bookId" element={<WineryDetail
+                  books={books}
                   users={users}
-                  comments={comments}
                   onChangeRating={onChangeRating}
                   onAddRating={onAddRating}
-                  onUpdateWinery={onUpdateWinery}
                 />}/>
-                 <Route path="/wineries/:wineryId/comments/:commentId/edit" element={<EditCommentForm
-                  wineries={wineries}
-                  comments={comments}
-                  onEditComment={onEditComment}
-                  onDeleteComment={onDeleteComment}
-                />}/>
-                 <Route path="/wineries/:wineryId/comments/new" element={<AddCommentForm
-                  wineries={wineries}
+                 <Route path="/books/:bookId/bookclubs/:bookclubId" element={<EditCommentForm
+                  books={books}
                   users={users}
-                  onAddComment={onAddComment}
+                 
                 />}/>
-                 <Route path="/wineries/:wineryId/comments/:commentId" element={<ShowCommentForm
-                  wineries={wineries}
-                  visits={visits}
-                  comments={comments}
+                 <Route path="/bookclub/:bookclubId/messages/new" element={<AddCommentForm
+                   books={books}
+                   users={users}
+                   onAddComment={onAddComment}
+                />}/>
+                   <Route path="/bookclub/:bookclubId/messages/:messageId/edit" element={<AddCommentForm
+                   books={books}
+                   users={users}
+                   onEditComment={onEditComment}
+                   onDeleteComment={onDeleteComment}
                 />}/>
                 <Route path="/users" element={<Users
                   users={users}
-                  visits={visits}
-                  comments={comments}
                 />} />
                 <Route path="/users/:id" element={<Users
-                  users={users}
-                  visits={visits}
-                  comments={comments}
+                   users={users}
                 />} />
-                 <Route path="/maps" element={<Maps 
-                 />} />
                 <Route path="/" element={<Home
                 />} />
                

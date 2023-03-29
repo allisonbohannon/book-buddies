@@ -33,30 +33,36 @@ const NavigationBar = () =>  {
             </NavLinkStyle>
             <NavLinkStyle>
                 <NavLink
-                    to="/wineries"
+                    to="/books"
                     style={{color: '#ffffff'}}
                     >
-                    Wineries
+                   Find Books + Clubs
                 </NavLink>
             </NavLinkStyle>
             <NavLinkStyle>
                 <NavLink
-                    to='/users'
+                    to='/mybooks'
                     style={{color: '#ffffff'}}
                     >
-                    Users
+                    My Books
                 </NavLink>
             </NavLinkStyle>
             <NavLinkStyle>
                 <NavLink 
-                     to='/maps'
+                     to='/mybookclubs'
                      style={{color: '#ffffff'}}
                     >
-                     Maps
+                     My Book Clubs
                 </NavLink>
             </NavLinkStyle>
-
-            <p style={{color: '#ffffff'}}>{currentUser? `Cheers, ${currentUser.username}!` : ""}</p>
+            <NavLinkStyle>
+                <NavLink 
+                     to='/me'
+                     style={{color: '#ffffff'}}
+                    >
+                     Me
+                </NavLink>
+            </NavLinkStyle>
             <div>{currentUser?  (
                     <Button variant="outline" onClick={handleLogout}>Logout</Button>) : (
                     <NavLink to="/Login"><Button>Log In</Button></NavLink>)}

@@ -8,7 +8,6 @@ import Error from "./Error";
 import NavBar from "./NavBar";
 import NavLinkStyle from "./NavLinkStyle";
 import Container from "./Container";
-import { Dropdown } from "./Dropdown";
 import { CardContainer, Card, CardHeader, CardHeading, CardImage, CardBody, CardButton, CardLink, CardScroller, DetailCard } from "./Card";
 
 
@@ -33,5 +32,4 @@ export {
      CardScroller, 
      DetailCard, 
      Container, 
-     Dropdown,
     };

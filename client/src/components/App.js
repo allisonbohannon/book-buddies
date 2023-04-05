@@ -4,13 +4,12 @@ import NavigationBar from "./NavigationBar";
 import Home from "../pages/Home";
 import Books from "../pages/Books";
 import Users from "../pages/Users";
-import WineryDetail from "../pages/WineryDetail";
+import BookPage from "../pages/BookPage";
 import EditCommentForm from "../pages/EditCommentForm";
 import ShowCommentForm from "../pages/ShowCommentForm";
 import AddCommentForm from "../pages/AddCommentForm";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
-import Maps from "../pages/Maps";
 import { UserContext } from "../context/User";
 
 
@@ -43,9 +42,14 @@ function App() {
 
   }, [])
 
+
   const onAddComment = (comment) => {
     // setComments([...comments, comment])
   }
+
+  const onAddBook = (newBook) => {
+      setBooks([...books, newBook])
+    }
 
   const onEditComment = (updatedComment) => {
     // setComments((comments)=> 
@@ -104,10 +108,9 @@ function App() {
             <Routes>
                 <Route path="/books" element={<Books
                   books={books}
-                  onChangeRating={onChangeRating}
-                  onAddRating={onAddRating}
+                  onAddBook={onAddBook}
                 />}/> 
-                <Route path="/books/:bookId" element={<WineryDetail
+                <Route path="/books/:bookId" element={<BookPage
                   books={books}
                   users={users}
                   onChangeRating={onChangeRating}

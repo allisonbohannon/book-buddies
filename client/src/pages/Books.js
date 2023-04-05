@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import ResultCard from '../components/ResultCard';
-import { Container, FormField, Input, CardButton, Error, CardContainer } from '../styles'
+import { Container, FormField, Input, CardButton, Error } from '../styles'
 
 
-const Books = () => {
+const Books = ({onAddBook}) => {
 
     const [searchTerm, setSearchTerm] = useState('')
-    // const [searchType, setSearchType] = useState()
     const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [searchResults, setSearchResults] = useState([])
@@ -30,7 +29,6 @@ const Books = () => {
                 setSearchTerm('')
             })
         }
-        
     }
 
     let displayResults; 
@@ -38,7 +36,7 @@ const Books = () => {
         displayResults = "Hmm... no matches found"
     } else {
         displayResults = searchResults.map(result => {
-            return <li key={result.key} style={{listStyle:'none'}}><ResultCard result={result}/></li>
+            return <li key={result.key} style={{listStyle:'none'}}><ResultCard result={result} onAddBook={onAddBook}/></li>
         })
     }
 
@@ -55,16 +53,6 @@ const Books = () => {
                 >
                 </Input>
             </FormField>
-            {/* <FormField>
-                <select 
-                    value={searchType}
-                    onChange={(e) => setSearchType(e.target.value)}
-                    >
-                    <option value="title">Title</option>
-                    <option value="author">Author</option>
-                    <option value="genre">Genre</option>
-                </select>
-            </FormField> */}
             <FormField>
                 <CardButton variant="fill" color="primary" type="submit">
                     {isLoading ? "Loading..." : "Search"}

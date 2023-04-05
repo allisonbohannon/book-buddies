@@ -26,7 +26,6 @@ const Books = ({onAddBook}) => {
             .then(data => {
                 setSearchResults(data.docs)
                 setIsLoading(false)
-                setSearchTerm('')
             })
         }
     }
@@ -35,7 +34,8 @@ const Books = ({onAddBook}) => {
     if (searchResults.length == 0) {
         displayResults = "Hmm... no matches found"
     } else {
-        displayResults = searchResults.map(result => {
+        displayResults = searchResults.filter(result => result.isbn )
+        .map(result => {
             return <li key={result.key} style={{listStyle:'none'}}><ResultCard result={result} onAddBook={onAddBook}/></li>
         })
     }

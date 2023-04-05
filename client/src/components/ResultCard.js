@@ -18,7 +18,7 @@ const ResultCard = ({result, onAddBook}) => {
             isbn: isbn
         }
 
-        console.log(bookObj)
+        console.log(JSON.stringify(bookObj))
         //On the backend, user find_or_create_by isbn to add to DB
         fetch("/books", {
             method: "POST",
@@ -28,7 +28,7 @@ const ResultCard = ({result, onAddBook}) => {
             body: JSON.stringify(bookObj),
             }).then(r => {
                 if (!r.ok) {
-                    console.log("Hmmm...something went wrong")
+                    console.log(r)
 
                 } else if (r.status === 201) {
                     r.json().then(data => {
@@ -43,28 +43,34 @@ const ResultCard = ({result, onAddBook}) => {
           
 
     let isbn; 
-    if (!result.isbn) {
-        isbn = 0
-    } else if (result.isbn.length > 0 ) {
+    if (result.isbn.length > 0 ) {
         isbn = result.isbn[0]
     } else {
         isbn = result.isbn
     }
 
-    const author = []; 
+    let author = ''; 
     if (!result.author_name) {
-        author.push("Unknown")
+       author = "Unknown"
+    } else if (!Array.isArray(result.author_name)) {
+        author = result.author_name
     } else {
-        result.author_name.forEach(name => author.push(name))
-    }
+        const maxThree = Math.min(3, result.author_name.length)
+        for (let i = 0; i < maxThree; i++) {
+            author = author.concat(result.author_name[i], ', ')
+         }
+    } 
 
-    const subject = []; 
-    if (!result.subject) {
-        subject.push(" ")
+    let subject = ''; 
+    if (result.subject) {
+        subject = "None listed"
+    } else if (!Array.isArray(result.subject)) {
+        subject = result.subject
     } else {
+        const maxThree = Math.min(3, result.subject.length)
         for (let i = 0; i < 3; i++) {
-            subject.push(result.subject[i])
-        }
+            subject = subject.concat(result.subject[i], ',')
+         }
     }
 
     const url = `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`
@@ -78,9 +84,9 @@ const ResultCard = ({result, onAddBook}) => {
                 <CardHeading>{result.title}</CardHeading>
             </CardHeader>
             <CardBody>
-                <p>Written By: {result.author_name.join(', ')}</p>
+                <p>Written By: {result.author_name}</p>
                 <p>Published {result.first_publish_year}</p>
-                <p>Genres: {subject.join(', ')}</p>
+                <p>Genres: {subject}</p>
             </CardBody>
         </Card>
     </CardActionArea>

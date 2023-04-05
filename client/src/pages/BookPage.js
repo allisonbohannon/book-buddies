@@ -1,12 +1,13 @@
-import React, {useContext} from 'react'
+import React, {useContext, useState} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import CommentCard from '../components/CommentCard';
 import { Link } from 'react-router-dom';
-import { DetailCard, Button, Container, CardHeader, CardHeading, CardBody, CardButton } from '../styles';
-import { Card } from '@mui/material';
+import { DetailCard, Container, CardHeader, CardHeading, CardBody, CardButton } from '../styles';
+import { Button, Card } from '@mui/material';
 import StarRatingShow from '../components/StarRatingShow';
 import StarRatingEdit from '../components/StarRatingEdit';
 import { UserContext } from '../context/User';
+import { Box } from '@mui/system';
 
 
 const BookPage = ({books, users, onChangeRating, onAddRating}) => {
@@ -15,8 +16,9 @@ const BookPage = ({books, users, onChangeRating, onAddRating}) => {
   const {currentUser} = useContext(UserContext)
   const navigate = useNavigate()
 
+  const [readStatus, setReadStatus] = useState("none") 
+
   const displayBook = books.find(book => book.id === parseInt(bookId))
-  console.log(displayBook)
 
   // const relatedComments = comments.filter(comment => comment.winery.id === displayWinery.id)
 
@@ -55,7 +57,7 @@ const BookPage = ({books, users, onChangeRating, onAddRating}) => {
   //   .then(data => onAddRating(data))
   // }
 
-  // const handleChangeRating = (newRating) => {
+  const handleChangeRating = (newRating) => {
   //   fetch(`/visits/${userVisit.id}`, {
   //     method: "PATCH",
   //     headers: {
@@ -70,11 +72,27 @@ const BookPage = ({books, users, onChangeRating, onAddRating}) => {
   //         .then(data => onUpdateWinery(data))
   //     })
 
-  // }
+   }
+
+  const handleMarkRead = () => {
+    if (readStatus === "none" || readStatus === "want") {
+      setReadStatus("read")
+    } else {
+      setReadStatus("none")
+    }
+  }
+
+  const handleMarkWant = () => {
+    if (readStatus === "none" || readStatus === "read") {
+      setReadStatus("want")
+    } else {
+      setReadStatus("none")
+    }
+  }
 
   const displayAvgRating = () =>  <StarRatingShow rating={displayBook.avgRating}/>
-  // const displayUserRating = () => <div>Your Rating: <StarRatingEdit userRating={userVisit.rating} onChange={handleChangeRating} /></div> 
-  
+  const displayUserRating = () => <div>Your Rating: <StarRatingEdit userRating={0} onChange={handleChangeRating} /></div> 
+
 
   return (
     <Container>
@@ -85,22 +103,36 @@ const BookPage = ({books, users, onChangeRating, onAddRating}) => {
               <img src={displayBook.cover_url} alt={displayBook.title} />
               <div style={{width: "40%"}}>
                 <CardHeading style={{fontSize:'2em', color:'#aaa', borderBottom: '1px solid #ddd', padding:'1em', }}>{displayBook.title}</CardHeading>
-                <CardHeading style={{fontSize:'1.1em', color:'rgb(150,78,108)' }}> Written by: {displayBook.author.join(', ')}</CardHeading>
+                <CardHeading style={{fontSize:'1.1em', color:'rgb(150,78,108)' }}> Written by: {displayBook.author}</CardHeading>
                 <p style={{color:"#aaa", textAlign:"center", margin:"0px"}}>Published: {displayBook.published_date}</p>
                 <p style={{color:"#aaa", textAlign:"center", margin:"0px"}}>Pages: {displayBook.pages}</p>
-                <p style={{overflow:'none'}}>{displayBook.subject.join(', ')}</p>
-                <p>Avg Rating: {displayAvgRating()}  </p>
-               { /* 
-                  {userVisit? "" : <Button  onClick={handleAddRating}>Add Rating</Button>}
-                <p>{userVisit? displayUserRating() : '' }</p> */}
+                <p style={{overflow:'none'}}>Genre: {displayBook.subject}</p>
+                <p>Avg Rating: {displayAvgRating()} </p>
+                <p>{readStatus === "read" ? displayUserRating() : '' }</p>
               </div> 
+             
           </CardHeader>
             {/* <CardBody style={{margin:"1em", padding:"3px"}}>
             <p style={{fontSize:'1.1em', color:'rgb(150,78,108)' }}>Comments:</p>
                 {displayComments}
             </CardBody> */}
             {/* <CardButton ><Link to={`/books/${displayBook.id}/comments/new`} style={{color:'white', textDecoration:'none'}} >Add Comment</Link></CardButton> */}
+            <Box textAlign="center">
+              <Button 
+                  onClick={handleMarkRead}
+                  variant={readStatus === "read" ? "outlined" : "contained"}
+                  style={{margin:"1em"}}>
+                    I've Read This!
+                </Button>
+              <Button 
+                  onClick={handleMarkWant}
+                  variant={readStatus === "want" ? "outlined" : "contained"}
+                  style={{margin:"1em"}}>
+                    I Want to Read This!
+                </Button>
+            </Box>
         </Card>
+        
     </Container>
   )
 }

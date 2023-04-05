@@ -132,6 +132,8 @@ const BookPage = ({books, users, onChangeRating, onAddRating}) => {
                 </Button>
             </Box>
         </Card>
+      {/* if a book club exists, display the book club info here, otherwise, link to create a new bookclub */}
+
         
     </Container>
   )

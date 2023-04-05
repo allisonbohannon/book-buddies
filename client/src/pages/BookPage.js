@@ -97,7 +97,7 @@ const BookPage = ({books, users, onChangeRating, onAddRating, onAddBookClub}) =>
       user: currentUser.id,
       status: "Active"
     }
-    fetch("/bookclubs", {
+    fetch("/book_clubs", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

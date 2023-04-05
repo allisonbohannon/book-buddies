@@ -1,7 +1,6 @@
 import React, {useContext, useState} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import CommentCard from '../components/CommentCard';
-import { Link } from 'react-router-dom';
 import { DetailCard, Container, CardHeader, CardHeading, CardBody, CardButton } from '../styles';
 import { Button, Card } from '@mui/material';
 import StarRatingShow from '../components/StarRatingShow';
@@ -10,7 +9,7 @@ import { UserContext } from '../context/User';
 import { Box } from '@mui/system';
 
 
-const BookPage = ({books, users, onChangeRating, onAddRating}) => {
+const BookPage = ({books, users, onChangeRating, onAddRating, onAddBookClub}) => {
 
   const { bookId } = useParams()
   const {currentUser} = useContext(UserContext)
@@ -19,6 +18,7 @@ const BookPage = ({books, users, onChangeRating, onAddRating}) => {
   const [readStatus, setReadStatus] = useState("none") 
 
   const displayBook = books.find(book => book.id === parseInt(bookId))
+  const userZip = 111
 
   // const relatedComments = comments.filter(comment => comment.winery.id === displayWinery.id)
 
@@ -90,6 +90,23 @@ const BookPage = ({books, users, onChangeRating, onAddRating}) => {
     }
   }
 
+  const handleAddBookClub = () => {
+    const bookClubObj = {
+      book_id: displayBook.id,
+      zip_three: userZip,
+      user: currentUser.id,
+      status: "Active"
+    }
+    fetch("/bookclubs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bookClubObj),
+        }).then(r => r.json())
+        .then(data => onAddBookClub(data))
+  }
+
   const displayAvgRating = () =>  <StarRatingShow rating={displayBook.avgRating}/>
   const displayUserRating = () => <div>Your Rating: <StarRatingEdit userRating={0} onChange={handleChangeRating} /></div> 
 
@@ -132,7 +149,12 @@ const BookPage = ({books, users, onChangeRating, onAddRating}) => {
                 </Button>
             </Box>
         </Card>
-      {/* if a book club exists, display the book club info here, otherwise, link to create a new bookclub */}
+      
+      <Box textAlign="center" style={{margin:"1em"}}>
+         {/* if a book club exists, display the book club info here, otherwise, link to create a new bookclub */}
+        { displayBook.bookClub ? "Book Club Info" : <Button onClick={handleAddBookClub}>Start a book club!</Button>}
+      </Box>
+     
 
         
     </Container>

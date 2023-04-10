@@ -12,6 +12,7 @@ import { Box } from '@mui/system';
 const BookPage = ({books, users, onChangeRating, onAddRating, onAddBookClub}) => {
 
   const { bookId } = useParams()
+
   const {currentUser} = useContext(UserContext)
   const navigate = useNavigate()
 
@@ -94,9 +95,10 @@ const BookPage = ({books, users, onChangeRating, onAddRating, onAddBookClub}) =>
     const bookClubObj = {
       book_id: displayBook.id,
       zip_three: userZip,
-      user: currentUser.id,
+      user_id: currentUser.id,
       status: "Active"
     }
+    console.log(JSON.stringify(bookClubObj))
     fetch("/book_clubs", {
           method: "POST",
           headers: {
@@ -104,11 +106,17 @@ const BookPage = ({books, users, onChangeRating, onAddRating, onAddBookClub}) =>
           },
           body: JSON.stringify(bookClubObj),
         }).then(r => r.json())
-        .then(data => onAddBookClub(data))
+        .then(data => { 
+          onAddBookClub(data)
+          navigate(`/bookclubs/${data.id}`)
+        })   
   }
 
-  const displayAvgRating = () =>  <StarRatingShow rating={displayBook.avgRating}/>
+  const displayAvgRating = () =>  <StarRatingShow rating={displayBook.avgerage_rating}/>
   const displayUserRating = () => <div>Your Rating: <StarRatingEdit userRating={0} onChange={handleChangeRating} /></div> 
+  
+  //const displayBookClub = displayBook.book_clubs
+    //.filter(club => club.zip_three === userZip) 
 
 
   return (

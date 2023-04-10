@@ -1,8 +1,8 @@
 class BookClubsController < ApplicationController
 
     def index 
-        books = BookClub.all 
-        render json: books  ##include: ['visits', 'visits.winery']
+        bookclubs = BookClub.all 
+        render json: bookclubs  ##include: ['visits', 'visits.winery']
     end
 
     def create
@@ -15,7 +15,7 @@ class BookClubsController < ApplicationController
         render json: bookclub
     end
 
-    def destroy
+    def delete
         bookclub = find_bookclub
         bookclub.destroy
         head :no_content

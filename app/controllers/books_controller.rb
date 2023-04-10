@@ -2,7 +2,7 @@ class BooksController < ApplicationController
 
     def index 
         books = Book.all 
-        render json: books  ##include: ['visits', 'visits.winery']
+        render json: books, include: :book_clubs  ##include: ['visits', 'visits.winery']
     end
 
     def create
@@ -11,7 +11,7 @@ class BooksController < ApplicationController
             render json: book
         else
             book = Book.create(book_params)
-            render json: book, status: :created
+            render json: book, include: :book_clubs, status: :created
         end
     end
 

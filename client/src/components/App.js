@@ -42,7 +42,6 @@ function App() {
 
   }, [])
 
-
   const onAddComment = (comment) => {
     // setComments([...comments, comment])
   }
@@ -52,7 +51,6 @@ function App() {
     }
 
   const onAddBookClub = (newBookClub) => {
-    console.log("Adding book")
     const updatedBooks = books.map(book => {
       if (book.id = newBookClub.book_id) {
         return {...book, bookclubs:{...book.bookclubs, newBookClub}}
@@ -130,7 +128,7 @@ function App() {
                   onChangeRating={onChangeRating}
                   onAddRating={onAddRating}
                 />}/>
-                 <Route path="/books/:bookId/bookclubs/:bookclubId" element={<EditCommentForm
+                 <Route path="/books/:bookId/bookclubs/:book_club_id" element={<EditCommentForm
                   books={books}
                   users={users}
                  
